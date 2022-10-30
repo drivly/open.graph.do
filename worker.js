@@ -24,17 +24,49 @@ export const examples = {
   listItems: 'https://templates.do/worker',
 }
 
-export default {
-  fetch: async (req, env) => {
-    const { user, hostname, pathname, rootPath, pathSegments, query } = await env.CTX.fetch(req).then(res => res.json())
-    if (rootPath) return json({ api, gettingStarted, examples, user })
-    
-    // TODO: Implement this
-    const [ resource, id ] = pathSegments
-    const data = { resource, id, hello: user.city }
-    
-    return json({ api, data, user })
-  }
+
+import { ImageResponse } from '@vercel/og'
+
+export const config = {
+  runtime: 'experimental-edge',
 }
+
+export default function () {
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          fontSize: 128,
+          background: 'white',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          textAlign: 'center',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        Hello world!
+      </div>
+    ),
+    {
+      width: 1200,
+      height: 600,
+    },
+  )
+}
+
+// export default {
+//   fetch: async (req, env) => {
+//     const { user, hostname, pathname, rootPath, pathSegments, query } = await env.CTX.fetch(req).then(res => res.json())
+//     if (rootPath) return json({ api, gettingStarted, examples, user })
+    
+//     // TODO: Implement this
+//     const [ resource, id ] = pathSegments
+//     const data = { resource, id, hello: user.city }
+    
+//     return json({ api, data, user })
+//   }
+// }
 
 const json = obj => new Response(JSON.stringify(obj, null, 2), { headers: { 'content-type': 'application/json; charset=utf-8' }})
